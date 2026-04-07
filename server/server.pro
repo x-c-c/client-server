@@ -1,14 +1,29 @@
-QT += core network concurrent sql
+TARGET = chatServer
+TEMPLATE = app
+CONFIG += c++17
+
+QT += core network widgets concurrent sql
 include(../common/common.pri)
-CONFIG  += c++17 cmdline
 
-
-SOURCES += \
-	mainServer.cpp
-
+HEADERS += \
+	DatabaseManager.h	\
+	ServerModel.h		\
+	ServerView.h		\
+	ServerController.h	\
+	TcpServer.h		\
+	ClientHandler.h
 	
-		
-
-qnx: target.path = /tmp/$${TARGET}/bin
-else: unix:!android: target.path = /opt/$${TARGET}/bin
-!isEmpty(target.path): INSTALLS += target
+SOURCES += \
+	DatabaseManager.cpp	\
+	ServerModel.cpp		\
+	ServerView.cpp		\
+	ServerController.cpp	\
+	TcpServer.cpp		\
+	ClientHandler.cpp	\
+	mainServer.cpp
+	
+DESTDIR = $$OUT_PWD/../bin
+CONFIG += file_copies
+copies.files = $$PWD/../config/defaultConfig.json
+copies.path = $$DESTDIR/config
+QMAKE_EXTRA_TARGETS += copies
