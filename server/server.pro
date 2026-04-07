@@ -1,10 +1,13 @@
-QT = core
-QT += core network
+QT += core network concurrent sql
+include(../common/common.pri)
 CONFIG  += c++17 cmdline
+
 
 SOURCES += \
 	mainServer.cpp
+
 	
+		
 
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
