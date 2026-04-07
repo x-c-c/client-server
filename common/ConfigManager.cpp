@@ -1,3 +1,5 @@
+// Реализация загрузки JSON и методов доступ
+
 #include "ConfigManager.h"
 #include "ConfigKeys"
 #include <fstream>
@@ -14,6 +16,7 @@ ConfigManager& ConfigManager::instance()
 
 bool ConfigManager::loadConfigFromFile(const std::filesystem::path& filePath)
 {
+	// Открываем файл
 	std::ifstream fileStream(filePath);
 	if (!fileStream.is_open())
 	{
@@ -21,10 +24,12 @@ bool ConfigManager::loadConfigFromFile(const std::filesystem::path& filePath)
 		return false;
 	}
 	
+	// Читаем содержимое в строку
 	std::stringstream stringStream;
 	stringStream << fileStream.rdbuf();
 	std::string fileContent = stringStream.str();
 	
+	// Парсим JSON
 	QJsonParseError parseError;
 	QJsonDocument jsonDocument = QJsonDocument::fromJson(QByteArray::fromStdString(fileContent), &parseError);
 	if (parseError != QJsonParseError::NoError)
