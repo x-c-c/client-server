@@ -10,9 +10,10 @@ class DatabaseManager : public QObject
 public:
 	static DatabaseManager& instance();
 	bool init();
-	bool addUser();
-	bool getUser();
-	bool userExists();
+	
+	bool addUser(const QString& username, const QString& passwordHash, const QString& email = QString() );	// email is optional
+	bool getUser(const QString& username, const QString& passwordHash, const QString& email, qint64& createdAt);
+	bool userExists(const QString& username);
 private:
 	DatabaseManager() = default;
 	~DatabaseManager();
