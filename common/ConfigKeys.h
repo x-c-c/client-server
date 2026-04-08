@@ -32,6 +32,7 @@ namespace ConfigKeys
 	constexpr const char* DefaultDatabaseFile 	= "chat_server.db";
 	constexpr quint16 DefaultPort			= 12345;
 	constexpr int DefaultMaxClients			= 1000;
+	constexpr int DefaultCleanupIntervalMs		= 600000; // 10 минут
 	constexpr int DefaultIdleTimeoutSeconds		= 600;
 	constexpr int DefaultDatabaseTimeoutMS		= 5000;
 	constexpr bool DefaultDatabaseWalMode		= true;

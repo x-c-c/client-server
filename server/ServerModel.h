@@ -29,6 +29,14 @@ public:
 	void removeActiveClient(qintptr socketDescriptor);
 	bool isClientLimitReached() const;
 	int getActiveClientCount() const;
+	
+signals:
+	void signalUserRegistered(const Qstring& username);
+	void signalUserAuthenticated(const QString& username);
+	void signalSessionExpired(const QString& token);
+private slots:
+	// Периодическая очистка истёкших сессий из БД
+	void slotCleanExpiredSessions();
 private:
 	QSet<qintptr> activeClients_;	// Множество дескрипторов подключённых клиентов
 	int maxClients_;		// Максимальное число клиентов (из конфига)
