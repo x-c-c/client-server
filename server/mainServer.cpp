@@ -1,5 +1,8 @@
 #include <QCoreApplication>
 #include "common/ConfigManager.h"
+#include "ServerModel.h"
+#include "ServerView.h"
+#include "ServerController.h"
 #include "common/Logger.h"
 int main(int argc, char* argv[])
 {
@@ -16,7 +19,11 @@ int main(int argc, char* argv[])
 	Logger::init("config/defaultConfig.json");
 	LOG_INFO("Server starting");
 	
-	
+	// Создаём модель, контроллер и представление
+	ServerModel model;
+	ServerView view;
+	ServerController controller(&model);
+	controller.setView(&view);
 	
 	return application.exec();
 }
