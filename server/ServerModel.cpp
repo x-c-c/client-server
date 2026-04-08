@@ -1,19 +1,21 @@
 #include "ServerModel.h"
-#include "common/CongigManager.h"
+#include "common/ConfigManager.h"
 #include "common/Logger.h"
 #include "DatabaseManager.h"
+#include "common/Argon2Hasher.h"
+#include <QUuid>
 ServerModel::ServerModel(QObject* parent) : QObject(parent)
 {
-	maxClients_ = CongigManager::instance().getMaxClients();
-	cleanUpTimer_ = new QTimer(this);
+	maxClients_ = ConfigManager::instance().getMaxClients();
+	cleanupTimer_ = new QTimer(this);
 	
-	connect(cleanUpTimer_, &QTimer::timeout, this, &ServerModel::slotCleanExpiredSessions);
-	cleanupTimer_->start(ConfigKeys::DefaultCleanupIntervalMs);	// Каждые 10 минут
+	connect(cleanupTimer_, &QTimer::timeout, this, &ServerModel::slotCleanExpiredSessions);
+	cleanupTimer_->start(300000);	// Каждые 10 минут
 }
 
 ServerModel::~ServerModel()
 {
-	cleanUpTimer_->stop();
+	cleanupTimer_->stop();
 }
 
 bool ServerModel::registerUser(const QString& username, const QString& password)
@@ -31,7 +33,8 @@ bool ServerModel::registerUser(const QString& username, const QString& password)
 		return false;
 	}
 	
-	emit signalUserRegistreted(username);
+	emit signalUserRegistered(username);
+		
 	return true;
 }
 
@@ -104,6 +107,10 @@ void ServerModel::slotCleanExpiredSessions()
 	DatabaseManager::instance().cleanExpiredSessions(timeout.count());
 }
 
+int ServerModel::getActiveClientsCount() const
+{
+	return activeClients_.size();
+}
 
 
 

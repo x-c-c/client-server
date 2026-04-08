@@ -2,7 +2,7 @@
 
 #ifndef PROTOCOL_H
 #define PROTOCOL_H
-
+#include <cstdint>
 enum class Command : uint16_t
 {
 	Auth 		= 1, // Запрос 	на аутентификацию

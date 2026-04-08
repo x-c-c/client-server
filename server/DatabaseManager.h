@@ -9,7 +9,7 @@
 
 class DatabaseManager : public QObject
 {
-	Q_Object;
+	Q_OBJECT
 public:
 	static DatabaseManager& instance();
 	
@@ -24,9 +24,9 @@ public:
 	 // Операции с сессиями (токенами)
 	bool createSession(const QString& token, const QString& username);
 	bool validateSession(const QString& token, QString& username);
-	bool updateSession(const QString& token);
-	bool removeSession(const QString& token);
-	void cleanExpiredSession(qint64 idleTimeoutSeconds);
+	void updateSessionActivity(const QString& token);
+	void removeSession(const QString& token);
+	void cleanExpiredSessions(qint64 idleTimeoutSeconds);
 private:
 	DatabaseManager() = default;
 	~DatabaseManager();

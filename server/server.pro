@@ -4,6 +4,7 @@ CONFIG += c++17
 
 QT += core network widgets concurrent sql
 include(../common/common.pri)
+INCLUDEPATH += ..
 
 HEADERS += \
 	DatabaseManager.h	\

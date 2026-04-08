@@ -8,16 +8,16 @@
 #include <QTimer>
 class ServerModel : public QObject
 {
-	Q_Object;
+	Q_OBJECT
 public:
 	explicit ServerModel(QObject* parent = nullptr);
 	~ServerModel();
 	
 	// Регистрация нового пользователя
-	bool registerUser(const Qstring& username, const QString& password);
+	bool registerUser(const QString& username, const QString& password);
 	
 	// Аутентификация: при успехе возвращает true и генерирует токен сессии
-	bool authenticateUser(const Qstring& username, const QString& password, QString& outToken);
+	bool authenticateUser(const QString& username, const QString& password, QString& outToken);
 	
 	// Проверка валидности токена сессии
 	bool validateSession(const QString& token, QString& outUsername);
@@ -28,10 +28,10 @@ public:
 	void addActiveClient(qintptr socketDescriptor, const QString& token);
 	void removeActiveClient(qintptr socketDescriptor);
 	bool isClientLimitReached() const;
-	int getActiveClientCount() const;
+	int getActiveClientsCount() const;
 	
 signals:
-	void signalUserRegistered(const Qstring& username);
+	void signalUserRegistered(const QString& username);
 	void signalUserAuthenticated(const QString& username);
 	void signalSessionExpired(const QString& token);
 private slots:
@@ -44,4 +44,4 @@ private:
 };
 
 
-#endif SERVERMODEL_H
+#endif

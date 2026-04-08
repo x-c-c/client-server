@@ -30,4 +30,4 @@ QT += core
 CONFIG += c++17
 QMAKE_CXXFLAGS += -std=c++17
 
-LIBS += -lspdlog -largon2
+LIBS += -lspdlog -largon2 -lfmt

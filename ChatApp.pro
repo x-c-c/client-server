@@ -1,3 +1,3 @@
 TEMPLATE = subdirs
-SUBDIRS = server client
+SUBDIRS = server
 CONFIG += ordered

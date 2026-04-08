@@ -5,6 +5,7 @@ CONFIG += c++17
 QT += core network widgets
 
 include(../common/common.pri)
+INCLUDEPATH += ..
 
 HEADERS += \
 	ClientModel.h		\

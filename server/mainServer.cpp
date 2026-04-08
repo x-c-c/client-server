@@ -1,4 +1,4 @@
-#include <QCoreApplication>
+#include <QApplication>
 #include "common/ConfigManager.h"
 #include "ServerModel.h"
 #include "ServerView.h"
@@ -6,7 +6,7 @@
 #include "common/Logger.h"
 int main(int argc, char* argv[])
 {
-	QCoreApplication  application(argc, argv);
+	QApplication  application(argc, argv);
 	
 	// Загружаем конфигурацию
 	if(!ConfigManager::instance().loadConfigFromFile("config/defaultConfig.json"))
@@ -24,6 +24,6 @@ int main(int argc, char* argv[])
 	ServerView view;
 	ServerController controller(&model);
 	controller.setView(&view);
-	
+	view.show();
 	return application.exec();
 }

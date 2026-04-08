@@ -1,9 +1,11 @@
 #include "Argon2Hasher.h"
 #include "argon2.h"
+#include <QString>
+#include <QList>
 #include <QRandomGenerator>
 // Параметры хеширования: длина хеша 32 байта, соль 16 байт
 static constexpr int HASH_LEN = 32;
-static constexpr int SALT_LEB = 16;
+static constexpr int SALT_LEN = 16;
 
 QByteArray Argon2Hasher::hashPassword(const QString& password)
 {
@@ -18,7 +20,7 @@ QByteArray Argon2Hasher::hashPassword(const QString& password)
 	
 	// argon2id_hash_raw: время = 2, память = 19 МБ, потоки = 1
 	int t_cost = 2;			//количество проходов
-	int m_cost = 19 * 1024*1024;	//использование памяти в MB
+	int m_cost = 19 * 1024;		//использование памяти в KB
 	int parallelism = 1;		//степень параллелизма
 	argon2id_hash_raw(	t_cost, 
 				m_cost, 
@@ -47,7 +49,7 @@ bool Argon2Hasher::verifyPassword(const QString& password, const QByteArray& sto
 	QByteArray computedHash(HASH_LEN, '\0');
 	
 	int t_cost = 2;			//количество проходов
-	int m_cost = 19 * 1024*1024;	//использование памяти в MB
+	int m_cost = 19 * 1024;		//использование памяти в KB
 	int parallelism = 1;		//степень параллелизма
 	argon2id_hash_raw(	t_cost, 
 				m_cost, 

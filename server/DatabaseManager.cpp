@@ -6,7 +6,7 @@
 #include <QSqlQuery>
 #include <QDateTime>
 
-DatabaseManager& DatabaseManager::instance();
+DatabaseManager& DatabaseManager::instance()
 {
 	static DatabaseManager instance;
 	return instance;
@@ -19,25 +19,25 @@ DatabaseManager::~DatabaseManager()
 		db_.close();
 	}
 }
-DatabaseManager::init()
+bool DatabaseManager::init()
 {
 	QMutexLocker locker(&mutex_);	// Блокируем на всё время инициализации
 	
 	auto& config = ConfigManager::instance();
 	QString dbFile = config.getString(	ConfigKeys::DatabaseSection,
-						ConfigKeys::DbFileKey,
-						ConfigKeys::DefaultDbFile);
+						ConfigKeys::DatabaseFileKey,
+						ConfigKeys::DefaultDatabaseFile);
 						
 	int timeoutMs = config.getInt(	ConfigKeys::DatabaseSection,
-					ConfigKeys::DbTimeoutMsKey,
-					ConfigKeys::DefaultDbTimeoutMs);
+					ConfigKeys::DatabaseTimeoutMsKey,
+					ConfigKeys::DefaultDatabaseTimeoutMs);
 	
 	bool walMode = config.getBool(	ConfigKeys::DatabaseSection,
-					ConfigKeys::DbWalModeKey,
-					ConfigKeys::DefaultDbWalMode);
+					ConfigKeys::DatabaseWalModeKey,
+					ConfigKeys::DefaultDatabaseWalMode);
 	
 	// Подключаем драйвер SQLite
-	db_ = QSqlDatabase::addDatabase("QSQLITE");
+	db_ = QSqlDatabase::addDatabase("QSQLITE", "chat_server_connection");
 	db_.setDatabaseName(dbFile);
 	db_.setConnectOptions(QString("QSQLITE_BUSY_TIMEOUT=%1").arg(timeoutMs));
 	

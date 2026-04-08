@@ -7,6 +7,15 @@
 		"max_clients":100,
 		"idle_timeout_sec":300
 	},
+	
+	"database":
+	{
+		"type": "sqlite",
+		"file": "chat_server.db",
+		"timeout_ms": 5000,
+		"wal_mode": true
+        },
+        
 	"logging":
 	{
 		"level":"info",

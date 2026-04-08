@@ -69,7 +69,8 @@ std::shared_ptr<spdlog::logger> Logger::get()
 void Logger::setLevel(LogLevel level)
 {
 	if (!globalLogger_) return;
-	switch (level) {
+	switch (level)
+	{
 		case LogLevel::Trace:	globalLogger_->set_level(spdlog::level::trace);
 			break;
 		case LogLevel::Debug:	globalLogger_->set_level(spdlog::level::debug);
