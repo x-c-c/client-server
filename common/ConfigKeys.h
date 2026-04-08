@@ -10,7 +10,7 @@ namespace ConfigKeys
 	// Секции конфигурационного файла
 	constexpr std::string_view ServerSection	= "server";
 	constexpr std::string_view DatabaseSection	= "database";
-	constexpr std::string_view LoggingSection	= "logging"
+	constexpr std::string_view LoggingSection	= "logging";
 	
 	// Ключи внутри секции "server"
 	constexpr std::string_view PortKey		= "port";
@@ -24,12 +24,12 @@ namespace ConfigKeys
 	
 	// Ключи внутри секции "logging"
 	constexpr std::string_view LogLevelKey		= "level";
-	constexpr std::string_view LogFilekey		= "file";
+	constexpr std::string_view LogFileKey		= "file";
 	constexpr std::string_view LogMaxSizeMbKey	= "max_size_mb";
 	constexpr std::string_view LogMaxFilesKey	= "max_files";
 	
 	// Значения по умолчанию
-	constexpr const char* DefaultDatabaseFile 	= "chat_server.db"
+	constexpr const char* DefaultDatabaseFile 	= "chat_server.db";
 	constexpr quint16 DefaultPort			= 12345;
 	constexpr int DefaultMaxClients			= 1000;
 	constexpr int DefaultIdleTimeoutSeconds		= 600;

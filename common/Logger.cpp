@@ -4,7 +4,7 @@
 #include "ConfigManager.h"
 #include "ConfigKeys.h"
 #include <spdlog/sinks/rotating_file_sink.h>
-#include <spdlog/sinks/stdout_color_sink.h>
+#include <spdlog/sinks/stdout_color_sinks.h>
 
 std::shared_ptr<spdlog::logger> Logger::globalLogger_ = nullptr;
 
@@ -17,20 +17,20 @@ void Logger::init(const std::filesystem::path& configPath)
 	// Читаем параметры логирования
 	QJsonObject loggingConfig = config.getLoggingConfig();
 	std::string logFile = loggingConfig
-		.value(QString::fromStdString(std::string(ConfigKey::LogFileKey)))
-		.toString(ConfigKey::DefaultLogFile).toStdString();
+		.value(QString::fromStdString(std::string(ConfigKeys::LogFileKey)))
+		.toString(ConfigKeys::DefaultLogFile).toStdString();
 	
 	int maxSizeMb = loggingConfig
-		.value(QString::fromStdString(std::string(ConfigKey::LogMaxSizeMbKey)))
-		.toInt(ConfigKey::DefaultLogMaxSizeMb);
+		.value(QString::fromStdString(std::string(ConfigKeys::LogMaxSizeMbKey)))
+		.toInt(ConfigKeys::DefaultLogMaxSizeMb);
 		
 	int maxFiles = loggingConfig
-		.value(QString::fromStdString(std::string(ConfigKey::LogMaxFilesKey)))
-		.toInt(ConfigKey::DefaultLogMaxFiles);
+		.value(QString::fromStdString(std::string(ConfigKeys::LogMaxFilesKey)))
+		.toInt(ConfigKeys::DefaultLogMaxFiles);
 		
 	std::string levelStr = loggingConfig
-		.value(QString::fromStdString(std::string(ConfigKey::LogLevelKey)))
-		.toString(ConfigKey::DefaultLogLevel)
+		.value(QString::fromStdString(std::string(ConfigKeys::LogLevelKey)))
+		.toString(ConfigKeys::DefaultLogLevel)
 		.toStdString();
 	
 	// Создаём приёмники (sinks): цветная консоль и файл с ротацией
@@ -51,7 +51,7 @@ void Logger::init(const std::filesystem::path& configPath)
 	// Автоматический сброс буфера при сообщениях уровня info и выше
 	globalLogger_->flush_on(spdlog::level::info);
 	// Делаем наш логгер глобальным для spdlog (опционально)
-	sdplog::set_default_logger(globalLogger_);
+	spdlog::set_default_logger(globalLogger_);
 }
 
 std::shared_ptr<spdlog::logger> Logger::get()

@@ -1,7 +1,7 @@
 // Реализация загрузки JSON и методов доступ
 
 #include "ConfigManager.h"
-#include "ConfigKeys"
+#include "ConfigKeys.h"
 #include <fstream>
 #include <sstream>
 #include <QDebug>
@@ -32,7 +32,7 @@ bool ConfigManager::loadConfigFromFile(const std::filesystem::path& filePath)
 	// Парсим JSON
 	QJsonParseError parseError;
 	QJsonDocument jsonDocument = QJsonDocument::fromJson(QByteArray::fromStdString(fileContent), &parseError);
-	if (parseError != QJsonParseError::NoError)
+	if (parseError.error != QJsonParseError::NoError)
 	{
 		qCritical() << "JSON parse error: " << parseError.errorString();
 		return false;
@@ -45,6 +45,11 @@ bool ConfigManager::loadConfigFromFile(const std::filesystem::path& filePath)
 	
 	rootJsonObject_ = jsonDocument.object();
 	return true;
+}
+
+QJsonObject ConfigManager::getLoggingConfig() const
+{
+	return rootJsonObject_.value(QString::fromStdString(std::string(ConfigKeys::LoggingSection))).toObject();
 }
 
 

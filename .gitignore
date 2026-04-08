@@ -1,18 +1,46 @@
-# This file is used to ignore files which are generated
-# ----------------------------------------------------------------------------
-!icon.ico
-!resources.rc
-*~
-*.autosave
-*.a
-*.core
-*.moc
+# Compiled object files
 *.o
 *.obj
-*.orig
-*.rej
+
+# Qt generated files
+moc_*.cpp
+moc_*.h
+moc_predefs.h
+ui_*.h
+qrc_*.cpp
+
+# Makefiles (ignore only generated ones, not handwritten)
+client/Makefile
+server/Makefile
+Makefile
+Makefile.*
+
+# Editor / IDE temporary files
+*~
+.*.swp
+*.autosave
+.DS_Store
+
+# Qt Creator user files
+*.pro.user*
+
+# Binaries and libs
+*.a
 *.so
 *.so.*
+*.dll
+*.exe
+*.app
+
+# Debug / Release folders
+*.Debug
+*.Release
+
+# Already present entries from your original file (keep them)
+*.core
+*.moc
+*.orig
+*.rej
 *_pch.h.cpp
 *_resource.rc
 *.qm
@@ -21,31 +49,15 @@
 core
 !core/
 tags
-.DS_Store
 .directory
 *.debug
-Makefile*
 *.prl
-*.app
-moc_*.cpp
-ui_*.h
-qrc_*.cpp
 Thumbs.db
 *.res
 *.rc
 /.qmake.cache
 /.qmake.stash
-
-# qtcreator generated files
-*.pro.user*
-
-# xemacs temporary files
 *.flc
-
-# Vim temporary files
-.*.swp
-
-# Visual Studio generated files
 *.ib_pdb_index
 *.idb
 *.ilk
@@ -59,17 +71,4 @@ Thumbs.db
 *.opensdf
 *.vcxproj
 *vcxproj.*
-
-# MinGW generated files
-*.Debug
-*.Release
-
-# Python byte code
 *.pyc
-
-# Binaries
-# --------
-*.dll
-*.exe
-
-server/server

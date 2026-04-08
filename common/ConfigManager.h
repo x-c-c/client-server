@@ -6,6 +6,7 @@
 
 #include <filesystem>
 #include <chrono>
+#include <QHostAddress>
 #include <QJsonObject>
 
 class ConfigManager
@@ -21,6 +22,9 @@ public:
 	//quint16 getPort() const;
 	//int getMaxClients() const;
 	//std::chrono::seconds getIdleTimeout() const;
+	
+	// Получить весь объект секции логирования (используется Logger-ом)
+	QJsonObject getLoggingConfig() const;
 private:
 	ConfigManager() = default;	// Приватный конструктор
 	QJsonObject rootJsonObject_;	// Корневой JSON-объект конфига
