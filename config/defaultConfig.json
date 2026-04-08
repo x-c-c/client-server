@@ -1,0 +1,18 @@
+{
+
+	"server":
+	{
+		"listen_ip":"0.0.0.0",
+		"port":12345,
+		"max_clients":100,
+		"idle_timeout_sec":300
+	},
+	"logging":
+	{
+		"level":"info",
+		"file":"logs/chat.log",
+		"max_size_mb":10,
+		"max_files":10
+	}
+
+}
