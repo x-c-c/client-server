@@ -1,9 +1,10 @@
+// Синглтон Майерса для работы с SQLite. Создаёт таблицы, выполняет запросы пользователей и сессий
+
 #ifndef DATABASEMANAGER_H
 #define DATABASEMANAGER_H
 
 #include <QObject>
 #include <QSqlDatabase>
-#include <QSqlQuery>
 #include <QMutex>
 
 class DatabaseManager : public QObject
@@ -11,25 +12,29 @@ class DatabaseManager : public QObject
 	Q_Object;
 public:
 	static DatabaseManager& instance();
+	
+	// Инициализация БД: открытие, настройка, создание таблиц
 	bool init();
 	
-	// operations wits users
-	bool addUser(const QString& username, const QString& passwordHash, const QString& email = QString() );	// email is optional
-	bool getUser(const QString& username, const QString& passwordHash, const QString& email, qint64& createdAt);
+	// Операции с пользователями
+	bool addUser(const QString& username, const QString& passwordHash); //, const QString& email = QString() 
 	bool userExists(const QString& username);
+	QString getUserPasswordHash(const QString& username);
 	
-	//operations with sessions
+	 // Операции с сессиями (токенами)
 	bool createSession(const QString& token, const QString& username);
-	bool validateSession(const QString& token, QString& username, qint64& lastActivity);
+	bool validateSession(const QString& token, QString& username);
 	bool updateSession(const QString& token);
 	bool removeSession(const QString& token);
 	void cleanExpiredSession(qint64 idleTimeoutSeconds);
 private:
 	DatabaseManager() = default;
 	~DatabaseManager();
-	bool createTables();
+	
+	bool createTables();	// Создание таблиц users и sessions
+
 	QSqlDatabase db_;
-	QMutex mutex_;
+	QMutex mutex_;		// Для потокобезопасного доступа к БД
 };
 
 
