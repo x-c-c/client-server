@@ -1,60 +1,97 @@
 #include "ServerStartStop.h"
-#define LOG_CLASS_ERROR(msg)
-bool ServerStartStop::start(int port)
+
+ServerStartStop::ServerStartStop(ServerStartStop&& other) noexcept : serverSocketFileDescriptor_(other.serverSocketFileDescriptor_)
 {
-	try
+	other.serverSocketFileDescriptor_ = -1;
+}
+
+ServerStartStop& ServerStartStop::operator=(ServerStartStop&& other) noexcept : serverSocketFileDescriptor_(other.serverSocketFileDescriptor_)
+{
+	if (this != &other)
 	{
-		serverFileDescriptor = socket(domain, type, protocol);
-		if (serverFileDescriptor < 0)
-		{
-			throw std::runtime_error(std::format("socket(domain = {}, type = {}, protocol = {})",
-														 domain,
-														 type,
-														 protocol));
-		}
-		//========================change later========================================
-		int opt = 1;
-		setsockopt(serverFileDescriptor, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
-		//============================================================================
-		//this->port = port;
-		sockaddr_in serverAddr{};
-		serverAddr.sin_family = domain;
-		serverAddr.sin_addr.s_addr = addr;
-		serverAddr.sin_port = htons(port);
-		
-		sockaddr* addrPtr = reinterpret_cast<sockaddr*>(&serverAddr);
-		socklen_t addrLen = sizeof(serverAddr);
-		int bindResult = bind(serverFileDescriptor, addrPtr, addrLen);
-		if (bindResult < 0)
-		{
-			throw std::runtime_error(std::format("bind(sockfd = {}, *addr = {}, addrLen = {})",
-													   serverFileDescriptor,
-													   static_cast<void*>(addrPtr),
-													   addrLen));
-		}
-		
-		int listenResult = listen(serverFileDescriptor, SOMAXCONN);	// SOMAXCONN - system's constant
-		if (listenResult < 0)
-		{
-			throw std::runtime_error(std::format("listen(sockfd = {}, backlog = {})",
-														 serverFileDescriptor,
-														 SOMAXCONN));
-		}		
-		return true;
+		stop();
+		serverSocketFileDescriptor_ = other.serverSocketFileDescriptor_;
+		other.serverSocketFileDescriptor_ = -1;
 	}
+	return *this;
+}
+
+~ServerStartStop()
+{
+	stop();
+}
+
+void ServerStartStop::start(const ServerConfig &config)
+{
+	if (serverSocketFileDescriptor_ >= 0)
+	{
+		stop();
+	}
+	
+	serverSocketFileDescriptor_ = socket(config.getDomain(), config.getType(), config.getProtocol());
+	if (serverSocketFileDescriptor_ < 0)
+	{
+		throw std::runtime_error(std::format("socket(domain = {},\
+													 type = {},\
+													 protocol = {} )",
+													 config.getDomain(),
+													 config.getType(),
+													 config.getProtocol() ));
+	}
+	//========================change later========================================
+	int opt = 1;
+	if (setsockopt(serverSocketFileDescriptor_, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0)
+	{
+		throw std::runtime_error(std::format("setsockopt(serverSocketFileDescriptor_ = {},\
+														 SOL_SOCKET = {},\
+														 SO_REUSEADDR = {},\
+														 &opt = {},\
+														 sizeof(opt) = {})",
+														 serverSocketFileDescriptor_,
+														 SOL_SOCKET,
+														 SO_REUSEADDR,
+														 &opt,
+														 sizeof(opt) ));
+	}
+	//============================================================================
+	sockaddr_in serverAddr{};
+	serverAddr.sin_family = config.getDomain();
+	serverAddr.sin_addr.s_addr = config.getAddr();
+	serverAddr.sin_port = htons(config.getPort());
+	
+	sockaddr* addrPtr = reinterpret_cast<sockaddr*>(&serverAddr);
+	socklen_t addrLen = sizeof(serverAddr);
+	int bindResult = bind(serverSocketFileDescriptor_, addrPtr, addrLen);
+	if (bindResult < 0)
+	{
+		throw std::runtime_error(std::format("bind(sockfd = {}, *addr = {}, addrLen = {})",
+												   serverSocketFileDescriptor_,
+												   static_cast<void*>(addrPtr),
+												   addrLen));
+	}
+	
+	int listenResult = listen(serverSocketFileDescriptor_, SOMAXCONN);	// SOMAXCONN - system's constant
+	if (listenResult < 0)
+	{
+		throw std::runtime_error(std::format("listen(sockfd = {}, backlog = {})",
+													 serverSocketFileDescriptor_,
+													 SOMAXCONN));
+	}		
+
+/*
 	catch(const std::exception &error)
 	{
 		std::cerr << "[ ERROR ]" <<"[ " << __PRETTY_FUNCTION__ << " ] in " << error.what() << std::endl;
-		if (serverFileDescriptor >= 0)
+		if (serverSocketFileDescriptor_ >= 0)
 		{
 			stop();
 		}
-		return false;
 	}
+*/
 }
 
 void ServerStartStop::stop()
 {
-	close(serverFileDescriptor);
-	serverFileDescriptor = -1;
+	lifecycle_.stop();
+	
 }

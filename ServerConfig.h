@@ -27,4 +27,4 @@ public:
 	void		setProtocol(int newProtocol)	{ protocol_ = newProtocol; }
 	void		setAddr(in_addr_t newAddr)		{ addr_ = newAddr; }
 	void		setPort(int newPort)			{ port_ = newPort; }	
-}
+};
