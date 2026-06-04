@@ -1,7 +1,7 @@
 // test.cpp
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest.h"
-#include "serverstartstop.h"
+#include "ServerStartStop.h"
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>

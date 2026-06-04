@@ -5,7 +5,7 @@ ServerStartStop::ServerStartStop(ServerStartStop&& other) noexcept : serverSocke
 	other.serverSocketFileDescriptor_ = -1;
 }
 
-ServerStartStop& ServerStartStop::operator=(ServerStartStop&& other) noexcept : serverSocketFileDescriptor_(other.serverSocketFileDescriptor_)
+ServerStartStop& ServerStartStop::operator=(ServerStartStop&& other) noexcept
 {
 	if (this != &other)
 	{
@@ -16,7 +16,7 @@ ServerStartStop& ServerStartStop::operator=(ServerStartStop&& other) noexcept : 
 	return *this;
 }
 
-~ServerStartStop()
+ServerStartStop::~ServerStartStop()
 {
 	stop();
 }
@@ -31,9 +31,7 @@ void ServerStartStop::start(const ServerConfig &config)
 	serverSocketFileDescriptor_ = socket(config.getDomain(), config.getType(), config.getProtocol());
 	if (serverSocketFileDescriptor_ < 0)
 	{
-		throw std::runtime_error(std::format("socket(domain = {},\
-													 type = {},\
-													 protocol = {} )",
+		throw std::runtime_error(std::format("socket(domain = {}, type = {}, protocol = {} )",
 													 config.getDomain(),
 													 config.getType(),
 													 config.getProtocol() ));
@@ -42,16 +40,7 @@ void ServerStartStop::start(const ServerConfig &config)
 	int opt = 1;
 	if (setsockopt(serverSocketFileDescriptor_, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0)
 	{
-		throw std::runtime_error(std::format("setsockopt(serverSocketFileDescriptor_ = {},\
-														 SOL_SOCKET = {},\
-														 SO_REUSEADDR = {},\
-														 &opt = {},\
-														 sizeof(opt) = {})",
-														 serverSocketFileDescriptor_,
-														 SOL_SOCKET,
-														 SO_REUSEADDR,
-														 &opt,
-														 sizeof(opt) ));
+		throw std::runtime_error("setsockopt(...)");	// many troubles with lib <format>
 	}
 	//============================================================================
 	sockaddr_in serverAddr{};
@@ -92,6 +81,10 @@ void ServerStartStop::start(const ServerConfig &config)
 
 void ServerStartStop::stop()
 {
-	lifecycle_.stop();
+	if (serverSocketFileDescriptor_ >= 0)
+	{
+		close(serverSocketFileDescriptor_);
+		serverSocketFileDescriptor_ = -1;
+	}
 	
 }
